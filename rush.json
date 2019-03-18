@@ -243,8 +243,8 @@
    */
   "projects": [
     {
-      "packageName": "app-a",
-      "projectFolder": "src/app-a"
+      "packageName": "vrepo",
+      "projectFolder": "src/vrepo"
     }
   ]
 }
