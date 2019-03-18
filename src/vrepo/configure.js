@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 
 const {PACKAGE: pkg} = process.env;
+const fs = require('fs');
+const {promisify} = require('util');
+const execa = require('execa');
 
 if (!pkg) {
   console.log(
@@ -10,3 +13,13 @@ if (!pkg) {
 }
 
 console.log(`Configuring package: ${pkg}`);
+
+(async () => {
+  const readFile = promisify(fs.readFile);
+  const rushConfig = await readFile(`${process.cwd()}/rush.json`);
+
+  console.log('Rush config is: ', String(rushConfig));
+
+  const {stdout} = await execa('rush update');
+  console.log(stdout);
+})();

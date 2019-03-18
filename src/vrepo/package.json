@@ -3,5 +3,7 @@
   "version": "1.0.0",
   "main": "configure.js",
   "license": "MIT",
-  "dependencies": {}
+  "dependencies": {
+    "execa": "^1.0.0"
+  }
 }
