@@ -53,7 +53,7 @@ function recursivelyAddProjects(rushProjects, deps) {
 (async () => {
   const rushRunner = `node ${__dirname}/../../common/scripts/install-run-rush.js`;
 
-  const readFile = promisify(fs.readFile);
+  const writeFile = promisify(fs.writeFile);
   const readDir = promisify(fs.readdir);
   const rushConfig = require(`${process.cwd()}/rush.json`);
 
@@ -82,6 +82,10 @@ function recursivelyAddProjects(rushProjects, deps) {
   );
 
   console.log('Rush config is: ', rushConfig);
+  await writeFile(
+    `${process.cwd()}/rush.json`,
+    JSON.stringify(rushConfig, null, '  ')
+  );
 
   try {
     const {stdout, stderr} = await execa(`${rushRunner} update`);

@@ -3,23 +3,15 @@
   "rushVersion": "5.6.1",
   "yarnVersion": "1.13.0",
   "nodeSupportedVersionRange": ">=8.9.4 <9.0.0",
-
   "gitPolicy": {},
-
   "repository": {},
-
   "eventHooks": {
     "preRushInstall": [],
-
     "postRushInstall": [],
-
     "preRushBuild": [],
-
     "postRushBuild": []
   },
-
   "variants": [],
-
   "projects": [
     {
       "packageName": "vrepo",
