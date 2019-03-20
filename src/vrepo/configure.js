@@ -51,8 +51,9 @@ function recursivelyAddProjects(rushProjects, deps) {
 }
 
 (async () => {
-  const rushRunner = `${__dirname}/../../common/scripts/install-run-rush.js`;
+  const rushRunner = `common/scripts/install-run-rush.js`;
 
+  const readFile = promisify(fs.readFile);
   const writeFile = promisify(fs.writeFile);
   const readDir = promisify(fs.readdir);
   const rushConfig = require(`${process.cwd()}/rush.json`);
@@ -95,10 +96,26 @@ function recursivelyAddProjects(rushProjects, deps) {
     JSON.stringify(rushConfig, null, '  ')
   );
 
+  await execa('node', [rushRunner, 'update']);
+
+  // Re-use lockfile from service and re-install if it exists
   try {
-    const {stdout, stderr} = await execa('node', [rushRunner, 'update']);
-    console.log(stdout, stderr);
+    const existingLockContent = await readFile(
+      `${process.cwd()}/src/${pkg}/yarn.lock`
+    );
+    console.log('Found existing lockfile content, re-generating dependencies.');
+    await execa('cp', [
+      `${process.cwd()}/src/${pkg}/yarn.lock`,
+      'common/config/rush/yarn.lock',
+    ]);
+    await execa('node', [rushRunner, 'update']);
   } catch (e) {
-    console.log('Error is: ', e);
+    console.log(
+      'Did not find existing lockfile content, generating new lockfile.'
+    );
+    await execa('cp', [
+      'common/config/rush/yarn.lock',
+      `${process.cwd()}/src/${pkg}/yarn.lock`,
+    ]);
   }
 })();
