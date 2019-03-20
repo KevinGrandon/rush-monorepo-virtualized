@@ -8,7 +8,7 @@
       "name": "configure",
       "summary": "Configures a service",
       "description": "Configures a package. Installs and symlinks dependencies for that package.",
-
+      "safeForSimultaneousRushProcesses": true,
       "shellCommand": "node src/vrepo/configure.js"
     }
   ]

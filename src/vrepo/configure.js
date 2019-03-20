@@ -51,11 +51,19 @@ function recursivelyAddProjects(rushProjects, deps) {
 }
 
 (async () => {
-  const rushRunner = `node ${__dirname}/../../common/scripts/install-run-rush.js`;
+  const rushRunner = `${__dirname}/../../common/scripts/install-run-rush.js`;
 
   const writeFile = promisify(fs.writeFile);
   const readDir = promisify(fs.readdir);
   const rushConfig = require(`${process.cwd()}/rush.json`);
+
+  // Reset rush config, we should only store a reference to our tooling package by default.
+  rushConfig.projects = [
+    {
+      packageName: 'vrepo',
+      projectFolder: 'src/vrepo',
+    },
+  ];
 
   // Populate packageNameToFolder
   const folders = await readDir(`${process.cwd()}/src/`);
@@ -88,7 +96,7 @@ function recursivelyAddProjects(rushProjects, deps) {
   );
 
   try {
-    const {stdout, stderr} = await execa(`${rushRunner} update`);
+    const {stdout, stderr} = await execa('node', [rushRunner, 'update']);
     console.log(stdout, stderr);
   } catch (e) {
     console.log('Error is: ', e);
